@@ -6,7 +6,9 @@ import {
 	ForbiddenException,
 	Put,
 	Param,
-	UseGuards
+	UseGuards,
+	ValidationPipe,
+	UsePipes
 } from '@nestjs/common';
 
 import { ObjectIdValidationPipe } from '../../shared/object-id-validation-pipe/object-id-vadlidation.pipe';
@@ -17,6 +19,7 @@ import { User, CreateUserDto } from '../model';
 
 @Controller('user')
 @UseGuards(RolesGuard)
+@UsePipes(new ValidationPipe())
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
