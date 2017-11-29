@@ -8,29 +8,32 @@ import {
 	Param,
 	UseGuards,
 	ValidationPipe,
-	UsePipes
+	UsePipes,
+	UseInterceptors
 } from '@nestjs/common';
 
 import { ObjectIdValidationPipe } from '../../shared/object-id-validation-pipe/object-id-vadlidation.pipe';
-import { Roles } from '../../auth/roles-decorator/roles.decorator';
-import { RolesGuard } from '../../auth/roles-guard/roles.guard';
+import { Roles } from '../../shared/roles-decorator/roles.decorator';
+import { RolesGuard } from '../../shared/roles-guard/roles.guard';
+import { DataResponseInterceptor } from '../../shared/data-response-interceptor/data-response.interceptor';
 import { UserService } from '../user-service/user.service';
 import { User, CreateUserDto } from '../model';
 
-@Controller('user')
+@Controller('/api/user')
 @UseGuards(RolesGuard)
 @UsePipes(new ValidationPipe())
+@UseInterceptors(DataResponseInterceptor)
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto) {
-		return this.userService.create(createUserDto);
+		return await this.userService.create(createUserDto);
 	}
 
 	@Put(':id')
 	@Roles('admin')
-	async put(
+	put(
 		@Param('id', new ObjectIdValidationPipe())
 		id,
 		@Body() updateUserDto: CreateUserDto
@@ -39,15 +42,15 @@ export class UserController {
 	}
 
 	@Get(':id')
-	async findOne(
+	findOne(
 		@Param('id', new ObjectIdValidationPipe())
 		id
 	) {
-		return await this.userService.findOne(id);
+		return this.userService.findOneById(id);
 	}
 
 	@Get()
-	async findAll(): Promise<User[]> {
+	findAll(): Promise<User[]> {
 		return this.userService.findAll();
 	}
 }

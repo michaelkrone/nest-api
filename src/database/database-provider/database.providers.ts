@@ -1,16 +1,12 @@
-import * as mongoose from 'mongoose';
+import { createConnection, Connection } from 'typeorm';
 
-import { DatabaseName } from '../../config';
-import { DefaultDbConnectionToken } from '../token';
+import { DatabaseConfig } from '../../config';
+import { UserDbConnectionToken } from '../config/token';
 
 export const databaseProviders = [
 	{
-		provide: DefaultDbConnectionToken,
-		useFactory: async () => {
-			(mongoose as any).Promise = global.Promise;
-			return await mongoose.connect(`mongodb://localhost/${DatabaseName}`, {
-				useMongoClient: true
-			});
-		}
+		provide: UserDbConnectionToken,
+		useFactory: async (): Promise<Connection> =>
+			await createConnection(DatabaseConfig)
 	}
 ];

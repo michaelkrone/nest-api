@@ -1,18 +1,18 @@
-import { Types } from 'mongoose';
-import { HttpException } from '@nestjs/common';
 import {
 	PipeTransform,
 	Pipe,
 	ArgumentMetadata,
-	HttpStatus
+	HttpStatus,
+	HttpException
 } from '@nestjs/common';
+import { ObjectId } from 'bson';
 
 @Pipe()
 export class ObjectIdValidationPipe implements PipeTransform<string> {
 	async transform(value: string, metadata: ArgumentMetadata) {
 		if (
 			['param', 'query'].indexOf(metadata.type) > -1 &&
-			!Types.ObjectId.isValid(value)
+			!ObjectId.isValid(value)
 		) {
 			throw new HttpException(
 				'Request validation failed',

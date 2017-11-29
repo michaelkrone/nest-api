@@ -1,3 +1,3 @@
+export * from './user.entity';
 export * from './user.dto';
-export * from './user.schema';
-export * from './user.interface';
+export * from './user.provider';

@@ -1,1 +1,1 @@
-export const UserModelToken = 'UserModel';
+export const UserRepositoryToken = 'UserModel';

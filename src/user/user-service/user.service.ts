@@ -1,31 +1,37 @@
-import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
+import { MongoRepository } from 'typeorm';
 
-import { UserModelToken } from '../config/token';
+import { UserRepositoryToken } from '../config/token';
 import { User, CreateUserDto } from '../model';
 
 @Component()
 export class UserService {
 	constructor(
-		@Inject(UserModelToken) private readonly userModel: Model<User>
+		@Inject(UserRepositoryToken)
+		private readonly repository: MongoRepository<User>
 	) {}
 
 	async create(createUserDto: CreateUserDto): Promise<User> {
-		const createdUser = new this.userModel(createUserDto);
-		return await createdUser.save();
+		return await this.repository.create(createUserDto);
 	}
 
 	async update(id: string, createUserDto: CreateUserDto): Promise<User> {
-		return await this.userModel
-			.findByIdAndUpdate(id, createUserDto, { new: true })
-			.exec();
+		const user = await this.repository.findOneAndUpdate(
+			{ _id: id },
+			createUserDto
+		);
+		return user.value;
 	}
 
 	async findAll(): Promise<User[]> {
-		return await this.userModel.find().exec();
+		return await this.repository.find();
 	}
 
-	async findOne(id: string): Promise<User> {
-		return await this.userModel.findById(id).exec();
+	async findOneById(id: string): Promise<User> {
+		return await this.repository.findOneById(id);
+	}
+
+	async findOne(query: any): Promise<User> {
+		return await this.repository.findOne(query);
 	}
 }
