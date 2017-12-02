@@ -1,4 +1,15 @@
-import { Column, ObjectIdColumn, Entity, Index, ObjectID } from 'typeorm';
+import {
+	Column,
+	ObjectIdColumn,
+	Entity,
+	Index,
+	ObjectID,
+	CreateDateColumn,
+	UpdateDateColumn
+} from 'typeorm';
+import { assign } from 'lodash';
+
+import { CreateUserDto } from './user.dto';
 
 @Entity()
 export class User {
@@ -12,9 +23,7 @@ export class User {
 
 	@Column() roles: string[];
 
-	constructor(name: string, email: string, roles: string[]) {
-		this.name = name;
-		this.email = email;
-		this.roles = roles;
-	}
+	@CreateDateColumn() created: Date;
+
+	@UpdateDateColumn() updated: Date;
 }

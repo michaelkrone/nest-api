@@ -1,2 +1,2 @@
 export const DefaultDbConnectionToken = 'DefaultDbConnectionToken';
-export const UserDbConnectionToken = 'UserDbConnectionToken';
+export const UserRepositoryToken = 'UserRepositoryToken';

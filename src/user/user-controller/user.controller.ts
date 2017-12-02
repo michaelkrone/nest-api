@@ -17,7 +17,7 @@ import { Roles } from '../../shared/roles-decorator/roles.decorator';
 import { RolesGuard } from '../../shared/roles-guard/roles.guard';
 import { DataResponseInterceptor } from '../../shared/data-response-interceptor/data-response.interceptor';
 import { UserService } from '../user-service/user.service';
-import { User, CreateUserDto } from '../model';
+import { User, CreateUserDto, UpdateUserDto } from '../model';
 
 @Controller('/api/user')
 @UseGuards(RolesGuard)
@@ -26,19 +26,9 @@ import { User, CreateUserDto } from '../model';
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	@Post()
-	async create(@Body() createUserDto: CreateUserDto) {
-		return await this.userService.create(createUserDto);
-	}
-
-	@Put(':id')
-	@Roles('admin')
-	put(
-		@Param('id', new ObjectIdValidationPipe())
-		id,
-		@Body() updateUserDto: CreateUserDto
-	) {
-		return this.userService.update(id, updateUserDto);
+	@Get()
+	findAll(): Promise<User[]> {
+		return this.userService.findAll();
 	}
 
 	@Get(':id')
@@ -49,8 +39,19 @@ export class UserController {
 		return this.userService.findOneById(id);
 	}
 
-	@Get()
-	findAll(): Promise<User[]> {
-		return this.userService.findAll();
+	@Roles('admin')
+	@Post()
+	async create(@Body() createUserDto: CreateUserDto) {
+		return await this.userService.create(createUserDto);
+	}
+
+	// @Roles('admin')
+	@Put(':id')
+	put(
+		@Param('id', new ObjectIdValidationPipe())
+		id,
+		@Body() updateUserDto: UpdateUserDto
+	) {
+		return this.userService.update(id, updateUserDto);
 	}
 }

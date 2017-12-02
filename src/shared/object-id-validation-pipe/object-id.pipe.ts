@@ -5,14 +5,14 @@ import {
 	ArgumentMetadata,
 	HttpStatus
 } from '@nestjs/common';
-import { ObjectId } from 'bson';
+import { ObjectID } from 'typeorm';
 
 @Pipe()
 export class ObjectIdValidationPipe implements PipeTransform<string> {
 	async transform(value: string, metadata: ArgumentMetadata) {
 		if (
 			['param', 'query'].indexOf(metadata.type) > -1 &&
-			!ObjectId.isValid(value)
+			!ObjectID.isValid(value)
 		) {
 			throw new HttpException('Validation failed', HttpStatus.BAD_REQUEST);
 		}

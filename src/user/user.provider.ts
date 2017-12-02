@@ -1,14 +1,14 @@
 import { Connection, MongoRepository } from 'typeorm';
 
-import { UserRepositoryToken } from '../config/token';
-import { UserDbConnectionToken } from '../../database/config/token';
-import { User } from './user.entity';
+import { DefaultDbConnectionToken } from '../database/config/token';
+import { UserRepositoryToken } from './config/token';
+import { User } from './model';
 
 export const userProviders = [
 	{
 		provide: UserRepositoryToken,
 		useFactory: (connection: Connection): MongoRepository<User> =>
 			connection.getMongoRepository(User),
-		inject: [UserDbConnectionToken]
+		inject: [DefaultDbConnectionToken]
 	}
 ];
