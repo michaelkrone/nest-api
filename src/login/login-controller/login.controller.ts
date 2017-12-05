@@ -6,8 +6,6 @@ import {
 	UsePipes
 } from '@nestjs/common';
 
-import { ObjectIdValidationPipe } from '../../shared/object-id-validation-pipe/object-id-vadlidation.pipe';
-
 import { LoginService } from '../login-service/login.service';
 import { LoginRequestDto } from '../model/login-request.dto';
 
